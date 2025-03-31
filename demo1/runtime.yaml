@@ -88,7 +88,7 @@ metadata:
     opendatahub.io/template-name: ovms
     openshift.io/display-name: ovms
   name: ovms
-  namespace: ic-shared-img-det
+  namespace: ai-gitops-demo
   labels:
     name: ovms
     opendatahub.io/dashboard: 'true'
