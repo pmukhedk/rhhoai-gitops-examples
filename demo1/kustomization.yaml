@@ -9,6 +9,5 @@ namespace: ai-gitops-demo
 
 resources:
 - project.yaml
-- create-data-connection.yaml
 - runtime.yaml
 - model.yaml
