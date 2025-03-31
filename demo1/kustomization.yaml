@@ -5,7 +5,7 @@ kind: Kustomization
 commonLabels:
   component: model
 
-namespace: demo-gitops
+namespace: ai-gitops-demo
 
 resources:
 - project.yaml
