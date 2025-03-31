@@ -9,4 +9,5 @@ namespace: prasad
 
 resources:
 - project.yaml
+- notebook.yaml
 
