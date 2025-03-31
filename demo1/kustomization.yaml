@@ -9,5 +9,6 @@ namespace: ai-gitops-demo
 
 resources:
 - project.yaml
+- create-pvc.yaml
 - notebook.yaml
 
