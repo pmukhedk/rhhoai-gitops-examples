@@ -2,7 +2,7 @@ apiVersion: kubeflow.org/v1
 kind: Notebook
 metadata:
   name: demo-workbench
-  namespace: prasad
+  namespace: ai-gitops-demo
   labels:
     app: demo-workbench
     opendatahub.io/dashboard: 'true'
@@ -11,7 +11,7 @@ metadata:
   annotations:
     notebooks.opendatahub.io/inject-oauth: 'true'
     opendatahub.io/image-display-name: Standard Data Science
-    notebooks.opendatahub.io/oauth-logout-url: 'https://rhods-dashboard-redhat-ods-applications.apps.cluster-r6dfx.r6dfx.sandbox936.opentlc.com/projects/prasad?notebookLogout=demo-workbench'
+    notebooks.opendatahub.io/oauth-logout-url: 'https://rhods-dashboard-redhat-ods-applications.apps.cluster-r6dfx.r6dfx.sandbox936.opentlc.com/projects/ai-gitops-demo?notebookLogout=demo-workbench'
     opendatahub.io/accelerator-name: ''
     openshift.io/display-name: demo-workbench
     notebooks.opendatahub.io/last-image-selection: 's2i-generic-data-science-notebook:2024.2'
@@ -44,9 +44,9 @@ spec:
                 --ServerApp.port=8888
                 --ServerApp.token=''
                 --ServerApp.password=''
-                --ServerApp.base_url=/notebook/prasad/demo-workbench
+                --ServerApp.base_url=/notebook/ai-gitops-demo/demo-workbench
                 --ServerApp.quit_button=False
-                --ServerApp.tornado_settings={"user":"admin","hub_host":"https://rhods-dashboard-redhat-ods-applications.apps.cluster-r6dfx.r6dfx.sandbox936.opentlc.com","hub_prefix":"/projects/prasad"}
+                --ServerApp.tornado_settings={"user":"admin","hub_host":"https://rhods-dashboard-redhat-ods-applications.apps.cluster-r6dfx.r6dfx.sandbox936.opentlc.com","hub_prefix":"/projects/ai-gitops-demo"}
             - name: JUPYTER_IMAGE
               value: 'image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/s2i-generic-data-science-notebook:2024.2'
             - name: PIP_CERT
@@ -57,7 +57,7 @@ spec:
               value: /etc/pki/tls/custom-certs/ca-bundle.crt
           readinessProbe:
             httpGet:
-              path: /notebook/prasad/demo-workbench/api
+              path: /notebook/ai-gitops-demo/demo-workbench/api
               port: notebook-port
               scheme: HTTP
             initialDelaySeconds: 10
@@ -67,7 +67,7 @@ spec:
             failureThreshold: 3
           livenessProbe:
             httpGet:
-              path: /notebook/prasad/demo-workbench/api
+              path: /notebook/ai-gitops-demo/demo-workbench/api
               port: notebook-port
               scheme: HTTP
             initialDelaySeconds: 10
