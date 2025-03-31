@@ -1,0 +1,100 @@
+apiVersion: kubeflow.org/v1
+kind: Notebook
+metadata:
+  name: demo-workbench
+  namespace: prasad
+  labels:
+    app: demo-workbench
+    opendatahub.io/dashboard: 'true'
+    opendatahub.io/odh-managed: 'true'
+    opendatahub.io/user: admin
+  annotations:
+    notebooks.opendatahub.io/inject-oauth: 'true'
+    opendatahub.io/image-display-name: Standard Data Science
+    notebooks.opendatahub.io/oauth-logout-url: 'https://rhods-dashboard-redhat-ods-applications.apps.cluster-r6dfx.r6dfx.sandbox936.opentlc.com/projects/prasad?notebookLogout=demo-workbench'
+    opendatahub.io/accelerator-name: ''
+    openshift.io/display-name: demo-workbench
+    notebooks.opendatahub.io/last-image-selection: 's2i-generic-data-science-notebook:2024.2'
+    notebooks.opendatahub.io/last-size-selection: Small
+    opendatahub.io/username: admin
+spec:
+  template:
+    spec:
+      serviceAccountName: demo-workbench
+      enableServiceLinks: false
+      containers:
+        - name: demo-workbench
+          image: 'image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/s2i-generic-data-science-notebook:2024.2'
+          imagePullPolicy: Always
+          workingDir: /opt/app-root/src
+          resources:
+            limits:
+              cpu: '2'
+              memory: 8Gi
+            requests:
+              cpu: '1'
+              memory: 8Gi
+          ports:
+            - containerPort: 8888
+              name: notebook-port
+              protocol: TCP
+          env:
+            - name: NOTEBOOK_ARGS
+              value: >-
+                --ServerApp.port=8888
+                --ServerApp.token=''
+                --ServerApp.password=''
+                --ServerApp.base_url=/notebook/prasad/demo-workbench
+                --ServerApp.quit_button=False
+                --ServerApp.tornado_settings={"user":"admin","hub_host":"https://rhods-dashboard-redhat-ods-applications.apps.cluster-r6dfx.r6dfx.sandbox936.opentlc.com","hub_prefix":"/projects/prasad"}
+            - name: JUPYTER_IMAGE
+              value: 'image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/s2i-generic-data-science-notebook:2024.2'
+            - name: PIP_CERT
+              value: /etc/pki/tls/custom-certs/ca-bundle.crt
+            - name: REQUESTS_CA_BUNDLE
+              value: /etc/pki/tls/custom-certs/ca-bundle.crt
+            - name: SSL_CERT_FILE
+              value: /etc/pki/tls/custom-certs/ca-bundle.crt
+          readinessProbe:
+            httpGet:
+              path: /notebook/prasad/demo-workbench/api
+              port: notebook-port
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /notebook/prasad/demo-workbench/api
+              port: notebook-port
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          volumeMounts:
+            - mountPath: /opt/app-root/src/
+              name: demo-workbench-storage
+            - mountPath: /dev/shm
+              name: shm
+            - mountPath: /etc/pki/tls/custom-certs/ca-bundle.crt
+              name: trusted-ca
+              subPath: ca-bundle.crt
+              readOnly: true
+      volumes:
+        - name: demo-workbench-storage
+          persistentVolumeClaim:
+            claimName: demo-workbench-storage
+        - name: shm
+          emptyDir:
+            medium: Memory
+        - name: trusted-ca
+          configMap:
+            name: workbench-trusted-ca-bundle
+            items:
+              - key: ca-bundle.crt
+                path: ca-bundle.crt
+            optional: true
