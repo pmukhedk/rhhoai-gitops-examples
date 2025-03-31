@@ -4,11 +4,11 @@ kind: Project
 metadata:
   annotations:
     openshift.io/description: Project created to demonstrate gitops way of managing RHOAI
-    openshift.io/display-name: prasad
+    openshift.io/display-name: ai-gitops-demo
     argocd.argoproj.io/sync-wave: "0"
     argocd.argoproj.io/managed-by: openshift-gitops
   labels:
-    kubernetes.io/metadata.name: prasad
+    kubernetes.io/metadata.name: ai-gitops-demo
     modelmesh-enabled: "true"
     opendatahub.io/dashboard: "true"
-  name: prasad
+  name: ai-gitops-demo
