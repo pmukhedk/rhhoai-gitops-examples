@@ -3,12 +3,12 @@ apiVersion: project.openshift.io/v1
 kind: Project
 metadata:
   annotations:
-    openshift.io/description: Project created to demonstrate custom serving runtime
-    openshift.io/display-name: Shared Image Detection Model
+    openshift.io/description: Project created to demonstrate gitops way of managing RHOAI
+    openshift.io/display-name: ai-gitops-demo
     argocd.argoproj.io/sync-wave: "0"
     argocd.argoproj.io/managed-by: openshift-gitops
   labels:
-    kubernetes.io/metadata.name: ic-shared-img-det
+    kubernetes.io/metadata.name: ai-gitops-demo
     modelmesh-enabled: "true"
     opendatahub.io/dashboard: "true"
-  name: ic-shared-img-det
+  name: ai-gitops-demo
