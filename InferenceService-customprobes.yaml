@@ -1,0 +1,36 @@
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: llama3-customprobes
+    serving.knative.openshift.io/enablePassthrough: "true"
+    serving.kserve.io/deploymentMode: Serverless
+    sidecar.istio.io/inject: "true"
+    sidecar.istio.io/rewriteAppHTTPProbers: "true"
+  labels:
+    networking.knative.dev/visibility: cluster-local
+    opendatahub.io/dashboard: "true"
+  name: llama3-customprobes
+  namespace: poc-genai-ml
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      args:
+        - '--max-model-len'
+        - '6000'
+      modelFormat:
+        name: vLLM
+      name: ""
+      resources:
+        limits:
+          cpu: "8"
+          memory: 32Gi
+          nvidia.com/gpu: "1"
+        requests:
+          cpu: "2"
+          memory: 4Gi
+          nvidia.com/gpu: "1"
+      runtime: llama3-customprobes
+      storageUri: pvc://llama-3.2-3b-instruct-pvc/Llama-3.2-3B-Instruct
